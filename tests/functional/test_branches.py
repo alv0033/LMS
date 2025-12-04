@@ -35,9 +35,6 @@ def test_list_branches_as_admin(client: TestClient, admin_headers):
     assert isinstance(data, list)
 
 
-# ============================================================
-# NUEVOS TESTS NECESARIOS SEGÚN REQUISITOS DEL PROYECTO
-# ============================================================
 
 def test_list_branches_as_member(client: TestClient, member_headers):
     resp = client.get("/api/v1/branches", headers=member_headers)

@@ -1,0 +1,174 @@
+{
+  "_type": "export",
+  "__export_format": 4,
+  "__export_date": "2025-12-04T00:00:00.000Z",
+  "__export_source": "insomnia.env-full",
+  "resources": [
+    {
+      "_id": "wrk_library_env_full",
+      "_type": "workspace",
+      "name": "Agregar token en enviroment",
+      "scope": "collection"
+    },
+
+    {
+      "_id": "env_library_base",
+      "_type": "environment",
+      "parentId": "wrk_library_env_full",
+      "name": "Base Environment",
+      "data": {
+        "base_url": "http://localhost:8000/api/v1",
+        "admin": {
+          "email": "admin@library.local",
+          "password": "admin123"
+        },
+        "auth": {
+          "access_token": "PEGAR_AQUI_TU_TOKEN"
+        }
+      }
+    },
+
+    {
+      "_id": "grp_auth",
+      "_type": "request_group",
+      "parentId": "wrk_library_env_full",
+      "name": "AUTH"
+    },
+    {
+      "_id": "grp_branches",
+      "_type": "request_group",
+      "parentId": "wrk_library_env_full",
+      "name": "BRANCHES"
+    },
+    {
+      "_id": "grp_books",
+      "_type": "request_group",
+      "parentId": "wrk_library_env_full",
+      "name": "BOOKS"
+    },
+    {
+      "_id": "grp_loans",
+      "_type": "request_group",
+      "parentId": "wrk_library_env_full",
+      "name": "LOANS"
+    },
+
+    {
+      "_id": "req_auth_login",
+      "_type": "request",
+      "parentId": "grp_auth",
+      "name": "Login (Admin)",
+      "method": "POST",
+      "url": "{{ base_url }}/auth/login",
+      "body": {
+        "mimeType": "application/x-www-form-urlencoded",
+        "params": [
+          { "name": "username", "value": "{{ admin.email }}" },
+          { "name": "password", "value": "{{ admin.password }}" }
+        ]
+      },
+      "headers": [
+        { "name": "Content-Type", "value": "application/x-www-form-urlencoded" }
+      ]
+    },
+
+    {
+      "_id": "req_branches_list",
+      "_type": "request",
+      "parentId": "grp_branches",
+      "name": "List branches",
+      "method": "GET",
+      "url": "{{ base_url }}/branches",
+      "headers": [],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ auth.access_token }}"
+      }
+    },
+    {
+      "_id": "req_branches_create",
+      "_type": "request",
+      "parentId": "grp_branches",
+      "name": "Create branch",
+      "method": "POST",
+      "url": "{{ base_url }}/branches",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"name\": \"Sucursal Central\",\n  \"address\": \"Av. Principal 123\",\n  \"description\": \"Sucursal creada desde Insomnia\",\n  \"phone_number\": \"555-000-1111\",\n  \"email\": \"central@library.local\",\n  \"is_active\": true\n}"
+      },
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ auth.access_token }}"
+      }
+    },
+
+    {
+      "_id": "req_books_list",
+      "_type": "request",
+      "parentId": "grp_books",
+      "name": "List books",
+      "method": "GET",
+      "url": "{{ base_url }}/books",
+      "headers": [],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ auth.access_token }}"
+      }
+    },
+    {
+      "_id": "req_books_create",
+      "_type": "request",
+      "parentId": "grp_books",
+      "name": "Create book",
+      "method": "POST",
+      "url": "{{ base_url }}/books",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"title\": \"El Quijote\",\n  \"author\": \"Miguel de Cervantes\",\n  \"isbn\": \"9788491050297\",\n  \"description\": \"Libro de ejemplo\",\n  \"total_copies\": 3,\n  \"branch_id\": 1\n}"
+      },
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ auth.access_token }}"
+      }
+    },
+
+    {
+      "_id": "req_loans_create",
+      "_type": "request",
+      "parentId": "grp_loans",
+      "name": "Create loan",
+      "method": "POST",
+      "url": "{{ base_url }}/loans",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"member_id\": 1,\n  \"book_id\": 1,\n  \"branch_id\": 1,\n  \"due_date\": \"2025-12-31\"\n}"
+      },
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ auth.access_token }}"
+      }
+    },
+    {
+      "_id": "req_loans_list",
+      "_type": "request",
+      "parentId": "grp_loans",
+      "name": "List loans",
+      "method": "GET",
+      "url": "{{ base_url }}/loans",
+      "headers": [],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ auth.access_token }}"
+      }
+    }
+  ]
+}

@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # 📚 Library Management System API
 
 API profesional desarrollada en **FastAPI**, diseñada para gestionar un sistema completo de biblioteca con múltiples sucursales, préstamos de libros, autenticación JWT, control de acceso basado en roles, logging estructurado y un suite de testing funcional completo.
@@ -30,32 +29,6 @@ Este proyecto implementa todas las prácticas modernas de desarrollo backend, co
 
 ---
 ```text
-=======
-📚 Library Management System API
-API profesional desarrollada en FastAPI, diseñada para gestionar un sistema completo de biblioteca con múltiples sucursales, préstamos de libros, autenticación JWT, control de acceso basado en roles, logging estructurado y un suite de testing funcional completo.
-
-Este proyecto implementa todas las prácticas modernas de desarrollo backend, con arquitectura limpia, validaciones fuertes, documentación clara y un enfoque enterprise-grade.
-
-🚀 Características principales
-Autenticación segura con JWT
-CRUD completo para:
-Usuarios (Admin)
-Sucursales
-Libros
-Préstamos
-Reglas de negocio avanzadas:
-Máximo 5 préstamos activos por usuario
-Flujo de préstamos con estados (REQUESTED → APPROVED → BORROWED → RETURNED)
-Transiciones controladas por rol (Member, Librarian, Admin)
-Job automático para marcar préstamos como OVERDUE
-Logging estructurado JSON compatible con ELK/Datadog/Splunk
-Filtros avanzados: búsqueda por título, autor, ISBN, sucursal
-Ordenamiento dinámico: asc/desc por cualquier campo permitido
-Paginación completa
-Manejo de errores profesional
-Testing con Pytest: unit, integration, functional
-Docker & Docker Compose
->>>>>>> backup
 ## 🧱 Arquitectura del Proyecto
 
 
@@ -94,11 +67,7 @@ library-management-api/
 │   └── conftest.py         # Fixtures compartidas (client, db, users, tokens, etc.)
 │
 ├── .env                    # Config local (no se commitea)
-<<<<<<< HEAD
 ├── .env.docker             # Config para entorno Docker
-=======
-├── .env.docker             # Config para entorno Docker (no usado)
->>>>>>> backup
 ├── .env.example            # Plantilla de variables de entorno
 ├── alembic.ini             # Config Alembic
 ├── docker-compose.yml      # Servicios: API + PostgreSQL (+ PgAdmin opcional)
@@ -108,7 +77,6 @@ library-management-api/
 ├── wait-for-db.sh          # Script para esperar la DB en Docker
 └── main.py                 # Punto de entrada para `uvicorn main:app` en entorno root
 
-<<<<<<< HEAD
 ```
 ---
 
@@ -189,62 +157,11 @@ pytest -q
 
 # 📝 Logging estructurado
 
-=======
-🧩 Modelos y Reglas de Negocio
-👤 Usuarios
-Roles soportados:
-
-Rol	Permisos
-MEMBER	Pedir préstamos, ver libros/sucursales
-LIBRARIAN	Crear libros, aprobar préstamos
-ADMIN	Control total, gestionar usuarios
-📚 Libros
-Reglas:
-
-ISBN es único
-Si se intenta crear un libro con ISBN ya existente:
-No se crea uno nuevo
-Se devuelve el existente (código 200/201 según lógica del proyecto)
-available_copies siempre ≤ total_copies
-🔄 Préstamos
-Estados:
-
-REQUESTED → APPROVED → BORROWED → RETURNED ↘ LOST BORROWED → OVERDUE (job automático)
-
-Reglas:
-
-Un usuario puede tener máximo 5 préstamos activos
-Member solo puede cancelar mientras está en REQUESTED
-Librarian maneja flujos operativos
-Admin puede forzar cambios
-🔐 Autenticación
-Autenticación vía JWT Bearer Token.
-
-POST /api/v1/auth/login Authorization: Bearer
-
-🧪 Testing
-El proyecto incluye:
-
-✔ Unit tests
-✔ Integration tests
-✔ Functional tests completos
-✔ Validación de logging
-✔ Validación de reglas de negocio
-✔ Validación de flujo de préstamos
-Ejecutar pruebas:
-
-pytest -q
-
-📝 Logging estructurado
->>>>>>> backup
 Todos los logs están en formato JSON.
 
 Ejemplo:
 
-<<<<<<< HEAD
 ```json
-=======
->>>>>>> backup
 {
   "timestamp": "2025-12-02T23:54:51Z",
   "level": "INFO",
@@ -360,8 +277,4 @@ Integración con proveedores externos ISBN
 🙌 Contribuciones
 
 Pull requests son bienvenidos.
-<<<<<<< HEAD
 Usa issues para sugerencias o reportar errores.
-=======
-Usa issues para sugerencias o reportar errores.
->>>>>>> backup
