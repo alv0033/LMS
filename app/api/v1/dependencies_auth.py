@@ -1,4 +1,4 @@
-from fastapi import Depends, HTTPException, status
+from fastapi import Depends, HTTPException, status,  Request
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
 #from jose import JWTError
@@ -14,6 +14,7 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/login")
 
 
 def get_current_user(
+    request: Request,
     token: str = Depends(oauth2_scheme),
     db: Session = Depends(get_db),
 ) -> User:
@@ -21,6 +22,16 @@ def get_current_user(
     Obtiene el usuario actual a partir del token JWT.
     Lanza 401 si no se puede validar.
     """
+
+     # 1) Revisar si el token ha sido revocado
+    revoked_tokens = getattr(request.app.state, "revoked_tokens", set())
+    if token in revoked_tokens:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Token revoked",
+        )
+
+        
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
@@ -32,13 +43,25 @@ def get_current_user(
     if payload is None:
         raise credentials_exception
 
-    user_id: int = payload.get("user_id")
+    user_id: int = payload.get("user_id") or payload.get("sub")
     if user_id is None:
         raise credentials_exception
+
+    # convertir a int para que la consulta funcione
+    try:
+        user_id = int(user_id)
+    except:
+        raise credentials_exception
+    
 
     # Obtener usuario de la BD
     user: User | None = db.query(User).filter(User.id == user_id).first()
     if user is None:
+        raise credentials_exception
+    
+    try:
+        user_id = int(user_id)
+    except (TypeError, ValueError):
         raise credentials_exception
 
     # Validar estado del usuario

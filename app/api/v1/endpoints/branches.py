@@ -8,6 +8,11 @@ from app.api.v1.dependencies_auth import get_current_user, require_role
 from app.db.models import LibraryBranch, UserRole, User
 from app.schemas.branch import BranchCreate, BranchUpdate, BranchRead
 
+import logging
+
+logger = logging.getLogger("api.branches")
+
+
 router = APIRouter(
     prefix="/api/v1/branches",
     tags=["branches"],
@@ -28,21 +33,43 @@ def list_branches(
     "/",
     response_model=BranchRead,
     status_code=status.HTTP_201_CREATED,
+    dependencies=[Depends(require_role(UserRole.LIBRARIAN))],
 )
 def create_branch(
     payload: BranchCreate,
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user),  # 👈 Swagger detecta seguridad aquí
+    current_user: User = Depends(get_current_user),  #Swagger detecta seguridad aquí
 ):
 
     # Verificar rol manualmente
     if current_user.role not in [UserRole.LIBRARIAN, UserRole.ADMIN]:
         raise HTTPException(status_code=403, detail="Not enough permissions")
 
-    branch = LibraryBranch(**payload.model_dump())
+    branch = LibraryBranch(
+        name=payload.name,
+        address=payload.address,
+        description=payload.description,
+        phone_number=payload.phone_number,
+        email=payload.email,
+        is_active=payload.is_active,
+    )
     db.add(branch)
     db.commit()
     db.refresh(branch)
+
+
+    # LOG: creación de sucursal
+    logger.info(
+        "Branch created (operation=branch_create)",
+        extra={
+            "operation": "branch_create",
+            "resource": "branch",
+            "branch_id": branch.id,
+            "status_code": 201,
+            "user_id": current_user.id,
+        },
+    )
+
     return branch
 
 

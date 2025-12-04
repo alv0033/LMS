@@ -103,6 +103,8 @@ def create_loan_request(
             "book_id": loan.book_id,
             "branch_id": loan.branch_id,
             "status_code": 201,
+            "old_status": None,                
+            "new_status": loan.status.value,
         },
     )
 
@@ -195,15 +197,15 @@ def update_loan_status(
         raise HTTPException(status_code=404, detail="Loan not found")
 
     # Validar permisos según rol y transición
-    new = payload.new_status
-    old = loan.status
+    new_status = payload.new_status
+    old_status = loan.status
 
     # Validar permisos según rol
     if current_user.role == UserRole.MEMBER:
         # Solo puede CANCELAR mientras está REQUESTED y sea suyo
         if loan.member_id != current_user.id:
             raise HTTPException(status_code=403, detail="Forbidden")
-        if not (old == LoanStatus.REQUESTED and new == LoanStatus.CANCELED):
+        if not (old_status == LoanStatus.REQUESTED and new_status == LoanStatus.CANCELED):
             raise HTTPException(
                 status_code=403,
                 detail="Members can only cancel requested loans",
@@ -211,7 +213,7 @@ def update_loan_status(
 
     elif current_user.role == UserRole.LIBRARIAN:
         # Librarian puede: APPROVED, BORROWED, RETURNED, LOST
-        if new not in {
+        if new_status not in {
             LoanStatus.APPROVED,
             LoanStatus.BORROWED,
             LoanStatus.RETURNED,
@@ -230,14 +232,14 @@ def update_loan_status(
     updated_loan = change_loan_status(
         db=db,
         loan=loan,
-        new_status=new,
+        new_status=new_status,
         actor=current_user,
         note=payload.note,
     )
 
     # LOG: cambio de estado
     logger.info(
-        "Loan status changed",
+         "Loan status changed (operation=loan_status_change)",
         extra={
             "operation": "loan_status_change",
             "resource": "loan",
@@ -245,8 +247,9 @@ def update_loan_status(
             "book_id": updated_loan.book_id,
             "branch_id": updated_loan.branch_id,
             "status_code": 200,
-            "old_status": old.value if isinstance(old, LoanStatus) else str(old),
-            "new_status": new.value if isinstance(new, LoanStatus) else str(new),
+            "old_status": old_status.value,
+            "new_status": new_status.value,
+            "user_id": current_user.id,
         },
     )
 

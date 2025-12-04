@@ -2,6 +2,8 @@ from typing import List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.orm import Session
+from sqlalchemy import asc, desc
+from sqlalchemy.exc import IntegrityError
 
 from app.api.v1.dependencies import get_db
 from app.api.v1.dependencies_auth import get_current_user, require_role
@@ -24,6 +26,8 @@ def list_books(
     limit: int = 100,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
+    order_by: str = "id",          # "title", "created_at", "publication_year", etc.
+    order_dir: str = "asc",        # "asc" o "desc"
 ):
     query = db.query(Book)
 
@@ -35,6 +39,24 @@ def list_books(
         query = query.filter(Book.isbn == isbn)
     if branch_id:
         query = query.filter(Book.branch_id == branch_id)
+
+    books = query.offset(skip).limit(limit).all()
+    
+    # ORDENAMIENTO
+    orderable_fields = {
+        "id": Book.id,
+        "title": Book.title,
+        "created_at": Book.created_at,
+        "publication_year": Book.publication_year,
+    }
+
+    column = orderable_fields.get(order_by, Book.id)
+
+    if order_dir.lower() == "desc":
+        query = query.order_by(desc(column))
+    else:
+        #default
+        query = query.order_by(asc(column))
 
     books = query.offset(skip).limit(limit).all()
     return books
@@ -71,10 +93,23 @@ def create_book(
     )
 
     db.add(book)
-    db.commit()
-    db.refresh(book)
-    return book
+    try:
+        db.commit()
+        db.refresh(book)
+        return book
 
+    except IntegrityError:
+        db.rollback()
+        
+        existing = db.query(Book).filter(Book.isbn == payload.isbn).first()
+        if existing:
+            raise HTTPException(
+            status_code=409,
+            detail="ISBN already exists",
+            )
+            return existing
+    
+    
 
 @router.get("/{book_id}", response_model=BookRead)
 def get_book(

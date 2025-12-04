@@ -13,3 +13,4 @@ pytest
 httpx
 loguru
 email-validator
+pytest-cov

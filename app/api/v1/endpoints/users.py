@@ -112,8 +112,8 @@ def delete_user(
         raise HTTPException(status_code=404, detail="User not found")
 
     # proteger admin embebido
-    if user.email == "admin@library.com":
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Built-in admin cannot be deleted")
+    if user.email == "admin@library.local":
+        raise HTTPException(status_code=400, detail="Built-in admin cannot be deleted")
 
     db.delete(user)
     db.commit()
