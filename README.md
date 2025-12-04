@@ -1,7 +1,3 @@
-✅ README.md COMPLETO PARA TU PROYECTO (LISTO PARA GITHUB)
-
-Copia y pega TODO este archivo como README.md en tu repositorio:
-
 # 📚 Library Management System API
 
 API profesional desarrollada en **FastAPI**, diseñada para gestionar un sistema completo de biblioteca con múltiples sucursales, préstamos de libros, autenticación JWT, control de acceso basado en roles, logging estructurado y un suite de testing funcional completo.
@@ -32,7 +28,7 @@ Este proyecto implementa todas las prácticas modernas de desarrollo backend, co
 - **Docker & Docker Compose**
 
 ---
-
+```text
 ## 🧱 Arquitectura del Proyecto
 
 
@@ -81,7 +77,7 @@ library-management-api/
 ├── wait-for-db.sh          # Script para esperar la DB en Docker
 └── main.py                 # Punto de entrada para `uvicorn main:app` en entorno root
 
-
+```
 ---
 
 # 🧩 Modelos y Reglas de Negocio
