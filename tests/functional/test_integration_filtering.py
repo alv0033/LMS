@@ -4,7 +4,7 @@ from typing import Dict
 
 from fastapi.testclient import TestClient
 
-
+#Genera  un ISBN unico para los tests
 def _unique_isbn(prefix: str) -> str:
     """Genera un ISBN único por test para evitar choques con la BD."""
     return f"{prefix}-{uuid.uuid4().hex[:8]}"
@@ -26,7 +26,7 @@ def _create_branch(client: TestClient, admin_headers: Dict, name: str, email: st
     assert resp.status_code == 201, resp.text
     return resp.json()["id"]
 
-
+#Genera un libro para los tests
 def _create_book(
     client: TestClient,
     admin_headers: Dict,
@@ -53,7 +53,7 @@ def _create_book(
     assert resp.status_code == 201, resp.text
     return resp.json()["id"]
 
-
+#Genera un préstamo para los tests
 def _create_member_loan(
     client: TestClient,
     member_headers: Dict,
@@ -71,7 +71,7 @@ def _create_member_loan(
     assert resp.status_code == 201, resp.text
     return resp.json()["id"]
 
-
+#verifica que el listado de libros soporte correctamente la paginación usando los parámetros skip y limit sin repetir resultados entre páginas
 def test_list_books_pagination(
     client: TestClient,
     admin_headers,
@@ -121,7 +121,7 @@ def test_list_books_pagination(
     ids_page2 = {b["id"] for b in data_page2}
     assert ids_page1.isdisjoint(ids_page2)
 
-
+#test de filtrado de libros por sucursal
 def test_list_books_filter_by_branch(
     client: TestClient,
     admin_headers,
@@ -176,7 +176,7 @@ def test_list_books_filter_by_branch(
     assert len(data_b) == 5
     assert all(b["branch_id"] == branch_b for b in data_b)
 
-
+#test de filtrado de préstamos por estado
 def test_list_loans_filter_by_status(
     client: TestClient,
     admin_headers,
@@ -222,7 +222,7 @@ def test_list_loans_filter_by_status(
     approved = [l for l in loans if l["status"] == "APPROVED"]
     assert any(l["id"] == loan_id for l in approved)
 
-
+#test de ordenamiento de libros por título asc y desc
 def test_list_books_sort_by_title_asc_desc(
     client: TestClient,
     admin_headers,

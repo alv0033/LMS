@@ -18,7 +18,7 @@ router = APIRouter(
 )
 
 
-@router.post("/register", response_model=UserRead, status_code=status.HTTP_201_CREATED)
+@router.post("/register", response_model=UserRead, status_code=201)
 def register_user(
     payload: UserCreate,
     db: Session = Depends(get_db),
@@ -71,7 +71,7 @@ def login(
             },
         )
         raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
+            status_code=401,
             detail="Incorrect email or password",
         )
 
@@ -91,7 +91,7 @@ def login(
     return Token(access_token=access_token)
 
 
-@router.post("/logout", status_code=status.HTTP_204_NO_CONTENT)
+@router.post("/logout", status_code=204)
 def logout(
     request: Request,
     current_user: User = Depends(get_current_user),

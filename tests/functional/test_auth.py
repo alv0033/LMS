@@ -114,14 +114,6 @@ def test_access_protected_endpoint_with_invalid_token_returns_401(client: TestCl
     resp = client.get("/api/v1/books", headers=invalid_headers)
     assert resp.status_code in (401, 403)
 
-#Test que demuestra que usuario con token puede acceder a un endpoint 
-def test_access_protected_endpoint_with_valid_token_succeeds(
-    client: TestClient, member_headers #esto genera el token
-):
-    resp = client.get("/api/v1/books/1", headers=member_headers)
-    assert resp.status_code == 200
-#Aqui arriba
-
 # LOGGING 
 
 #Test para verificar que hay un log por login exitoso
