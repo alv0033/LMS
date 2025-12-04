@@ -1,6 +1,8 @@
 #configuracion de los test
 import os
 import sys
+import uuid
+
 from pathlib import Path
 from typing import Generator
 
@@ -178,11 +180,12 @@ def member_token(client: TestClient, member_credentials):
     assert resp.status_code == 200
     return resp.json()["access_token"]
 
-#Se limpian los loans para los tests
+
 @pytest.fixture
 def member_headers(member_token):
     return {"Authorization": f"Bearer {member_token}"}
 
+#Se limpian los loans para los tests
 def clear_member_loans():
     """
     Limpia todos los préstamos del member de prueba
@@ -205,3 +208,33 @@ def clean_member_loans():
     clear_member_loans()
     yield
     # opcional: podrías limpiar otra vez al final si quieres
+
+
+# ======================================================
+# GENERADORES DE DATOS ÚNICOS (ISBN, EMAIL, ETC.)
+# ======================================================
+@pytest.fixture
+def unique_isbn():
+    """
+    Genera un ISBN único y corto (máx. 13 chars) para respetar la
+    longitud de la columna isbn en la BD.
+    Uso:
+        isbn = unique_isbn("RET")  # prefijo opcional, se truncará si es largo
+    """
+    def _make(prefix: str = "TEST") -> str:
+        # concatenamos prefijo + uuid y luego truncamos a 13 caracteres
+        base = f"{prefix}{uuid.uuid4().hex}"
+        return base[:13]
+    return _make
+
+
+@pytest.fixture
+def unique_email():
+    """
+    Genera emails únicos para pruebas donde se requiera email UNIQUE.
+    Uso:
+        email = unique_email("branch")
+    """
+    def _make(prefix: str = "user") -> str:
+        return f"{prefix}-{uuid.uuid4().hex[:8]}@library.local"
+    return _make

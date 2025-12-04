@@ -27,13 +27,13 @@ def get_current_user(
     revoked_tokens = getattr(request.app.state, "revoked_tokens", set())
     if token in revoked_tokens:
         raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
+            status_code=401,
             detail="Token revoked",
         )
 
         
     credentials_exception = HTTPException(
-        status_code=status.HTTP_401_UNAUTHORIZED,
+        status_code=401,
         detail="Could not validate credentials",
     )
 

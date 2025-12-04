@@ -4,6 +4,7 @@ from typing import Dict
 from fastapi.testclient import TestClient
 import pytest
 
+#Todos los requerimientos de RBAC (Role Based Access Control)
 
 # ============================================================
 # Helpers

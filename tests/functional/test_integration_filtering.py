@@ -230,7 +230,8 @@ def test_list_books_sort_by_title_asc_desc(
 ):
     """
     Verifica ordenamiento básico por título usando
-    ?order_by=title&order_dir=asc|desc.
+    ?order_by=title&order_dir=asc|desc, filtrando por la sucursal
+    creada en este test para evitar interferencia con otros datos.
     """
     branch_id = _create_branch(
         client,
@@ -249,24 +250,36 @@ def test_list_books_sort_by_title_asc_desc(
             isbn_prefix="SORT-ISBN",
         )
 
-    # ASC
+    # ASC: filtramos por branch y ponemos un limit alto
     resp_asc = client.get(
-        "/api/v1/books?order_by=title&order_dir=asc",
+        f"/api/v1/books?branch_id={branch_id}&order_by=title&order_dir=asc&skip=0&limit=50",
         headers=member_headers,
     )
     assert resp_asc.status_code == 200, resp_asc.text
     data_asc = resp_asc.json()
-    asc_titles = [b["title"] for b in data_asc if b["title"] in titles]
 
-    assert asc_titles.index("AAA Libro") < asc_titles.index("ZZZ Libro")
+    asc_titles = [b["title"] for b in data_asc]
+    # primero aseguramos que estén los 3 títulos
+    for t in titles:
+        assert t in asc_titles
+
+    # nos quedamos solo con los 3 en el orden recibido
+    asc_subset = [t for t in asc_titles if t in titles]
+
+    assert asc_subset.index("AAA Libro") < asc_subset.index("ZZZ Libro")
 
     # DESC
     resp_desc = client.get(
-        "/api/v1/books?order_by=title&order_dir=desc",
+        f"/api/v1/books?branch_id={branch_id}&order_by=title&order_dir=desc&skip=0&limit=50",
         headers=member_headers,
     )
     assert resp_desc.status_code == 200, resp_desc.text
     data_desc = resp_desc.json()
-    desc_titles = [b["title"] for b in data_desc if b["title"] in titles]
 
-    assert desc_titles.index("ZZZ Libro") < desc_titles.index("AAA Libro")
+    desc_titles = [b["title"] for b in data_desc]
+    for t in titles:
+        assert t in desc_titles
+
+    desc_subset = [t for t in desc_titles if t in titles]
+
+    assert desc_subset.index("ZZZ Libro") < desc_subset.index("AAA Libro")

@@ -65,7 +65,7 @@ def list_books(
 @router.post(
     "/",
     response_model=BookRead,
-    status_code=status.HTTP_201_CREATED,
+    status_code=201,
     dependencies=[Depends(require_role(UserRole.LIBRARIAN))],
 )
 def create_book(
@@ -76,7 +76,7 @@ def create_book(
     branch = db.query(LibraryBranch).filter(LibraryBranch.id == payload.branch_id).first()
     if not branch:
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
+            status_code=400,
             detail="Branch not found",
         )
 
@@ -120,7 +120,7 @@ def get_book(
     book = db.query(Book).filter(Book.id == book_id).first()
     if not book:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
+            status_code=404,
             detail="Book not found",
         )
     return book
@@ -139,7 +139,7 @@ def update_book(
     book = db.query(Book).filter(Book.id == book_id).first()
     if not book:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
+            status_code=404,
             detail="Book not found",
         )
 
@@ -157,7 +157,7 @@ def update_book(
 
 @router.delete(
     "/{book_id}",
-    status_code=status.HTTP_204_NO_CONTENT,
+    status_code=204,
     dependencies=[Depends(require_role(UserRole.ADMIN))],
 )
 def delete_book(
@@ -167,7 +167,7 @@ def delete_book(
     book = db.query(Book).filter(Book.id == book_id).first()
     if not book:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
+            status_code=404,
             detail="Book not found",
         )
 

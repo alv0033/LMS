@@ -53,7 +53,7 @@ def test_register_invalid_email_fails(client: TestClient):
         "email": "correo-invalido",
         "password": "pass123",
         "full_name": "User Invalid",
-        "role": "MEMBER",
+        "role": "member",
     }
 
     resp = client.post("/api/v1/auth/register", json=payload)
@@ -118,7 +118,7 @@ def test_access_protected_endpoint_with_invalid_token_returns_401(client: TestCl
 def test_access_protected_endpoint_with_valid_token_succeeds(
     client: TestClient, member_headers #esto genera el token
 ):
-    resp = client.get("/api/v1/books", headers=member_headers)
+    resp = client.get("/api/v1/books/1", headers=member_headers)
     assert resp.status_code == 200
 #Aqui arriba
 
