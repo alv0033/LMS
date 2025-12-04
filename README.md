@@ -1,216 +1,284 @@
-📘 Library Management API — README
-🔍 Overview
+✅ README.md COMPLETO PARA TU PROYECTO (LISTO PARA GITHUB)
 
-Library Management API es un sistema completo para administrar una red de bibliotecas, permitiendo gestionar:
+Copia y pega TODO este archivo como README.md en tu repositorio:
 
-Usuarios (ADMIN, LIBRARIAN, MEMBER)
+# 📚 Library Management System API
 
-Sucursales de biblioteca
+API profesional desarrollada en **FastAPI**, diseñada para gestionar un sistema completo de biblioteca con múltiples sucursales, préstamos de libros, autenticación JWT, control de acceso basado en roles, logging estructurado y un suite de testing funcional completo.
 
-Libros
+Este proyecto implementa todas las prácticas modernas de desarrollo backend, con arquitectura limpia, validaciones fuertes, documentación clara y un enfoque enterprise-grade.
 
-Préstamos de libros y su historial
+---
 
-Autenticación vía JWT
+## 🚀 Características principales
 
-Migraciones con Alembic
+- Autenticación segura con **JWT**
+- CRUD completo para:
+  - Usuarios (Admin)
+  - Sucursales
+  - Libros
+  - Préstamos
+- **Reglas de negocio avanzadas**:
+  - Máximo 5 préstamos activos por usuario
+  - Flujo de préstamos con estados (`REQUESTED → APPROVED → BORROWED → RETURNED`)
+  - Transiciones controladas por rol (Member, Librarian, Admin)
+  - Job automático para marcar préstamos como **OVERDUE**
+- **Logging estructurado JSON** compatible con ELK/Datadog/Splunk
+- **Filtros avanzados**: búsqueda por título, autor, ISBN, sucursal
+- **Ordenamiento dinámico**: asc/desc por cualquier campo permitido
+- **Paginación completa**
+- **Manejo de errores profesional**
+- **Testing con Pytest**: unit, integration, functional
+- **Docker & Docker Compose**
 
-PostgreSQL como base de datos
+---
 
-Documentación interactiva con Swagger
+## 🧱 Arquitectura del Proyecto
 
-Este proyecto está desarrollado usando FastAPI, SQLAlchemy 2.0, Alembic y PostgreSQL, siguiendo buenas prácticas de arquitectura, seguridad y mantenibilidad.
 
-🧰 Tecnologías principales
-Componente	Tecnología
-Lenguaje	Python 3.12
-Framework API	FastAPI
-Base de datos	PostgreSQL
-ORM	SQLAlchemy 2.0
-Migraciones	Alembic
-Autenticación	JWT (jsonwebtoken)
-Logging	Logging estructurado
-Containerización	Docker (pendiente)
-📁 Estructura del Proyecto
 library-management-api/
 ├── alembic/
-│   ├── versions/           # Migraciones generadas
-│   └── env.py
+│   ├── env.py
+│   ├── versions/           # Migraciones Alembic
+│   ├── README
+│   └── script.py.mako
+│
 ├── app/
 │   ├── api/
 │   │   └── v1/
-│   │       ├── endpoints/  # Rutas (auth, branches, etc.)
-│   │       └── dependencies.py
+│   │       ├── endpoints/  # Rutas (auth, users, branches, books, loans, stats, etc.)
+│   │       └── dependencies.py / dependencies_auth.py
+│   │
 │   ├── core/
-│   │   ├── config.py       # Settings y variables de entorno
-│   │   ├── security.py     # JWT y hashing
-│   │   └── logging.py
+│   │   ├── config.py       # Configuración (settings, .env)
+│   │   ├── logging.py      # Configuración de logging estructurado
+│   │   └── security.py     # JWT, hashing de contraseñas, utilidades de seguridad
+│   │
 │   ├── db/
-│   │   ├── models.py       # Modelos SQLAlchemy
-│   │   └── session.py      # SessionLocal y engine
-│   ├── schemas/            # Pydantic schemas
-│   ├── services/
-│   │   └── init_admin.py   # Creación automática del admin inicial
-│   └── main.py             # FastAPI App + Swagger personalizado
-├── .gitignore
-├── requirements.txt
-├── alembic.ini
-├── README.md
-└── .env.example
-
-🔐 Autenticación (JWT)
-
-El sistema utiliza OAuth2 Password Flow:
-
-El usuario llama POST /api/v1/auth/login con email/password.
-
-El servidor valida credenciales.
-
-Se genera un JWT con:
-
-sub: ID del usuario
-
-role: rol del usuario
-
-Expiración configurable
-
-Swagger obtiene y guarda el token automáticamente cuando usas "Authorize".
-
-Swagger ahora no te pide pegar el token:
-simplemente pones email + password y él lo maneja.
-
-👤 Usuario Admin Automático
-
-Cada vez que inicia la API:
-
-Se ejecuta ensure_builtin_admin()
-
-Si no existe un usuario admin, se crea:
-
-email: admin@library.local
-password: admin123   (puedes cambiarlo)
-role: ADMIN
+│   │   ├── __init__.py
+│   │   ├── models.py       # Modelos SQLAlchemy (User, LibraryBranch, Book, Loan, etc.)
+│   │   └── session.py      # SessionLocal, engine, Base
+│   │
+│   ├── schemas/            # Esquemas Pydantic (request/response)
+│   ├── services/           # Lógica de negocio (ej. loans, init_admin, jobs)
+│   ├── __init__.py
+│   └── main.py             # Instancia FastAPI, middlewares, registro de routers
+│
+├── tests/
+│   ├── unit/               # Tests unitarios (lógica pura)
+│   ├── integration/        # Tests de integración (DB, servicios)
+│   ├── functional/         # Tests funcionales end-to-end con TestClient
+│   └── conftest.py         # Fixtures compartidas (client, db, users, tokens, etc.)
+│
+├── .env                    # Config local (no se commitea)
+├── .env.docker             # Config para entorno Docker
+├── .env.example            # Plantilla de variables de entorno
+├── alembic.ini             # Config Alembic
+├── docker-compose.yml      # Servicios: API + PostgreSQL (+ PgAdmin opcional)
+├── Dockerfile              # Imagen de la API (FastAPI + Uvicorn)
+├── pytest.ini              # Configuración Pytest
+├── requirements.txt        # Dependencias del proyecto
+├── wait-for-db.sh          # Script para esperar la DB en Docker
+└── main.py                 # Punto de entrada para `uvicorn main:app` en entorno root
 
 
-Este usuario no puede ser eliminado.
+---
 
-🛢️ Base de Datos & Migraciones
-1. Crear todas las tablas
-alembic upgrade head
+# 🧩 Modelos y Reglas de Negocio
 
-2. Verificar si todo se creó bien
-psql -U library_user -d library_db -c "\dt"
+## 👤 Usuarios
+Roles soportados:
+
+| Rol | Permisos |
+|-----|----------|
+| **MEMBER** | Pedir préstamos, ver libros/sucursales |
+| **LIBRARIAN** | Crear libros, aprobar préstamos |
+| **ADMIN** | Control total, gestionar usuarios |
+
+---
+
+## 📚 Libros
+Reglas:
+
+- ISBN es **único**
+- Si se intenta crear un libro con ISBN ya existente:
+  - **No se crea uno nuevo**
+  - **Se devuelve el existente** (código 200/201 según lógica del proyecto)
+- `available_copies` siempre ≤ `total_copies`
+
+---
+
+## 🔄 Préstamos
+Estados:
 
 
-Debes ver tablas:
 
-users
+REQUESTED → APPROVED → BORROWED → RETURNED
+↘ LOST
+BORROWED → OVERDUE (job automático)
 
-library_branches
 
-books
+Reglas:
 
-loans
+- Un usuario puede tener **máximo 5 préstamos activos**
+- Member solo puede cancelar mientras está en `REQUESTED`
+- Librarian maneja flujos operativos
+- Admin puede forzar cambios
 
-loan_status_history
+---
 
-alembic_version
+# 🔐 Autenticación
 
-📚 Endpoints Principales
-🔑 Autenticación
+Autenticación vía **JWT Bearer Token**.
+
+
+
 POST /api/v1/auth/login
-
-
-Ejemplo para Swagger:
-
-username: admin@library.local
-password: admin123
-
-🏢 Sucursales (Branches)
-Crear sucursal (ADMIN / LIBRARIAN)
-POST /api/v1/branches/
 Authorization: Bearer <token>
 
-Obtener lista
-GET /api/v1/branches/
 
-🧪 Probar la API con Swagger
+---
 
-Inicia el servidor:
+# 🧪 Testing
 
-uvicorn app.main:app --reload
+El proyecto incluye:
 
+- ✔ **Unit tests**
+- ✔ **Integration tests**
+- ✔ **Functional tests completos**
+- ✔ Validación de **logging**
+- ✔ Validación de reglas de negocio
+- ✔ Validación de flujo de préstamos
 
-Abre:
-
-http://127.0.0.1:8000/docs
-
-
-Presiona Authorize
-
-Ingresa email y password
-
-Swagger añadirá automáticamente:
-
-Authorization: Bearer <token>
-
-⚙️ Variables de Entorno
-
-Ejemplo .env.example:
-
-DATABASE_URL=postgresql+psycopg2://library_user:password@localhost:5432/library_db
-JWT_SECRET=supersecretkey
-JWT_EXPIRE_MINUTES=60
+Ejecutar pruebas:
 
 
-No subas tu .env real al repositorio.
 
-🚀 Cómo correr el proyecto
-1. Activar entorno virtual
-source venv/bin/activate
+pytest -q
 
-2. Instalar dependencias
-pip install -r requirements.txt
 
-3. Aplicar migraciones
+---
+
+# 📝 Logging estructurado
+
+Todos los logs están en formato JSON.
+
+Ejemplo:
+
+```json
+{
+  "timestamp": "2025-12-02T23:54:51Z",
+  "level": "INFO",
+  "logger": "api.loans",
+  "operation": "loan_status_change",
+  "loan_id": 12,
+  "old_status": "REQUESTED",
+  "new_status": "APPROVED",
+  "user_id": 3,
+  "request_id": "b1f32..."
+}
+
+🗄️ Base de Datos
+
+Motor recomendado: PostgreSQL 15+
+
+Migraciones:
+
 alembic upgrade head
 
-4. Ejecutar servidor
-uvicorn app.main:app --reload
+⚙️ Variables de entorno
 
-📥 Subir a GitHub
+Crear un archivo .env:
 
-Desde la raíz del proyecto:
+DATABASE_URL=postgresql+psycopg2://postgres:postgres@db:5432/library
+JWT_SECRET=supersecret123
+LOG_LEVEL=60
 
-git add .
-git commit -m "Initial API setup"
-git push -u origin main
+ADMIN_EMAIL=admin@library.local
+ADMIN_PASSWORD=admin123
 
-📌 Estado actual del proyecto
+🐳 Docker
 
-✔ Estructura completa del proyecto
-✔ Modelos SQLAlchemy implementados
-✔ Migraciones Alembic generadas y aplicadas
-✔ Autenticación con JWT funcionando
-✔ Admin inicial automático
-✔ CRUD básico de branches funcionando
-✔ Swagger personalizado (sin token manual)
-✔ Configuración limpia de OpenAPI
-✔ Base de datos PostgreSQL funcionando
-✔ Errores solucionados (bcrypt, pydantic, alembic, openapi)
+Levantar todo:
 
-🔜 Siguientes pasos recomendados
+docker compose up --build
 
-CRUD de Books
 
-CRUD de Loans + lógica de negocio
+Servicios:
 
-Historial de cambios de estado
+Servicio	Puerto
+API FastAPI	8000
+PostgreSQL	5432
+📡 Endpoints principales (resumen)
+Auth
+Método	Endpoint	Descripción
+POST	/auth/register	Registrar usuario
+POST	/auth/login	Iniciar sesión
+Branches
+Método	Endpoint
+GET	/branches
+POST	/branches
+PUT	/branches/{id}
+Books
+Método	Endpoint
+GET	/books
+POST	/books
+GET	/books/{id}
+PUT	/books/{id}
+DELETE	/books/{id}
+Loans
+Método	Endpoint
+POST	/loans
+GET	/loans
+GET	/loans/{id}
+PATCH	/loans/{id}/status
+⛓️ Ejemplos cURL
+Login
+curl -X POST http://localhost:8000/api/v1/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"admin@library.com","password":"admin"}'
 
-Logging estructurado
+Crear libro
+curl -X POST http://localhost:8000/api/v1/books \
+  -H "Authorization: Bearer <token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+        "title":"Nuevo Libro",
+        "author":"Autor",
+        "isbn":"X-100",
+        "branch_id":1,
+        "total_copies":5
+      }'
 
-Testing con Pytest
+📊 Diagramas
+ERD (ASCII)
+ Users( id PK, name, email, role )
+     │
+     └──< Loans >──┐
+                    │
+              Books( id PK, isbn UNIQUE, branch_id FK )
+                    │
+                    └── LibraryBranches( id PK )
 
-Dockerización completa
+Flujo de préstamo
+Member → REQUEST → Librarian APRROVE → BORROW → RETURN
+                                     ↘ LOST
+           BORROWED → OVERDUE (job)
 
-Roles y autorizaciones en todos los endpoints
+🛣️ Roadmap
+
+Implementar WebSockets para notificaciones
+
+Admin dashboard (React)
+
+Reportes PDF/Excel
+
+Sistema de reservas de libros
+
+Integración con proveedores externos ISBN
+
+
+🙌 Contribuciones
+
+Pull requests son bienvenidos.
+Usa issues para sugerencias o reportar errores.
