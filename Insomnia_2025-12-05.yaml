@@ -1,0 +1,799 @@
+type: collection.insomnia.rest/5.0
+schema_version: "5.1"
+name: Final
+meta:
+  id: wrk_934c5627b1c74722a86167ac3ee8d332
+  created: 1764911626937
+  modified: 1764914270763
+  description: ""
+collection:
+  - name: Auth
+    meta:
+      id: fld_6b01dbc21c2a41a68994ddbcdbe02b5f
+      created: 1764911626942
+      modified: 1764911626942
+      sortKey: -1764911626942
+      description: ""
+    children:
+      - url: "{{ base_url }}/api/v1/auth/register"
+        name: Register User
+        meta:
+          id: req_806d58676a944d45a4ddd7b568839f02
+          created: 1764911626943
+          modified: 1764914401869
+          isPrivate: false
+          description: ""
+          sortKey: -1764911626943
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "email": "insomnia@g.com",
+              "full_name": "insomnia",
+              "password": "insomnia"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ base_url }}/api/v1/auth/logout"
+        name: Logout
+        meta:
+          id: req_1e76b0fb5f2d464b8054ce7933ca825d
+          created: 1764911626945
+          modified: 1764916735311
+          isPrivate: false
+          description: ""
+          sortKey: -1764911626945
+        method: POST
+        headers:
+          - name: Authorization
+            value: Bearer {{ _.Token }}
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ base_url }}/api/v1/auth/login"
+        name: Login
+        meta:
+          id: req_4acbbefe6ab34f1bad53e4debd388423
+          created: 1764911626945
+          modified: 1764922075819
+          isPrivate: false
+          description: ""
+          sortKey: -1764911626945
+        method: POST
+        body:
+          mimeType: application/x-www-form-urlencoded
+          params:
+            - name: grant_type
+              value: password
+              description: dont move
+            - name: username
+              value: admin@library.com
+              description: useremail
+              disabled: false
+            - name: password
+              value: admin123
+              description: userpassword
+              disabled: false
+            - name: scope
+              value: ""
+              description: dont move
+              disabled: false
+            - name: client_id
+              value: string
+              description: dont move
+              disabled: false
+            - name: client_secret
+              value: "********"
+              description: dont move
+              disabled: false
+        headers:
+          - name: Content-Type
+            value: application/x-www-form-urlencoded
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: Branches
+    meta:
+      id: fld_b83ff0c45d414866a15eb2ffe38b4ec4
+      created: 1764911626946
+      modified: 1764911626946
+      sortKey: -1764911626946
+      description: ""
+    children:
+      - url: "{{ base_url }}/api/v1/branches/"
+        name: List Branches
+        meta:
+          id: req_09522e230be1423e91bed57b6a1da527
+          created: 1764911626947
+          modified: 1764916892924
+          isPrivate: false
+          description: ""
+          sortKey: -1764911626947
+        method: GET
+        headers:
+          - name: Authorization
+            value: Bearer {{ _.Token }}
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ base_url }}/api/v1/branches/"
+        name: Create Branch
+        meta:
+          id: req_447d85460504447fb7122487e6b43f4e
+          created: 1764911626948
+          modified: 1764917967590
+          isPrivate: false
+          description: ""
+          sortKey: -1764911626948
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "name": "Insomnia",
+              "address": "loc",
+              "description": "si",
+              "phone_number": "443",
+              "email": "j@gmail.com",
+              "is_active": true
+            }
+        headers:
+          - name: Authorization
+            value: Bearer {{ _.Token }}
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ base_url }}/api/v1/branches/#ID"
+        name: Branch info
+        meta:
+          id: req_1df51d46d3254cd79fa798cb53bf4384
+          created: 1764911626949
+          modified: 1764918652383
+          isPrivate: false
+          description: ""
+          sortKey: -1764911626949
+        method: GET
+        headers:
+          - name: Authorization
+            value: Bearer {{ _.Token }}
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ base_url }}/api/v1/branches/#ID"
+        name: Update Branch
+        meta:
+          id: req_3f47b6bab3e044f08a613fbc3fb99aa7
+          created: 1764911626950
+          modified: 1764918664786
+          isPrivate: false
+          description: ""
+          sortKey: -1764911626950
+        method: PUT
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "name": "Insomnia",
+              "address": "loc",
+              "description": "si",
+              "phone_number": "442",
+              "email": "j@gmail.com",
+              "is_active": true
+            }
+        headers:
+          - name: Authorization
+            value: Bearer {{ _.Token }}
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ base_url }}/api/v1/branches/#ID"
+        name: Delete Branch
+        meta:
+          id: req_c90f03d86d534eb984ebb205ec780549
+          created: 1764911626951
+          modified: 1764918657857
+          isPrivate: false
+          description: ""
+          sortKey: -1764911626951
+        method: DELETE
+        headers:
+          - name: Authorization
+            value: Bearer {{ _.Token }}
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: Books
+    meta:
+      id: fld_c2078e48885a417292019c33d5064d68
+      created: 1764911626951
+      modified: 1764911626951
+      sortKey: -1764911626951
+      description: ""
+    children:
+      - url: "{{ base_url }}/api/v1/books/"
+        name: List Books
+        meta:
+          id: req_7e688b93fc484e1cbb62acddf5c21c90
+          created: 1764911626952
+          modified: 1764921840149
+          isPrivate: false
+          description: ""
+          sortKey: -1764911626952
+        method: GET
+        parameters:
+          - name: title
+            value: cl
+            description: title/author/isbn/branch_id
+            disabled: false
+          - name: skip
+            value: "0"
+            description: "0"
+            disabled: false
+          - name: limit
+            value: "100"
+            description: "100"
+            disabled: false
+          - name: ordered_by
+            value: id
+            description: id
+            disabled: false
+          - name: order_dir
+            value: asc
+            description: asc or desc
+            disabled: false
+        headers:
+          - name: Authorization
+            value: Bearer {{ _.Token }}
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ base_url }}/api/v1/books/#ID"
+        name: Get Book
+        meta:
+          id: req_00cbb8a88df542ed86f88e5471f99ca9
+          created: 1764911626953
+          modified: 1764921693110
+          isPrivate: false
+          description: ""
+          sortKey: -1764911626953
+        method: GET
+        headers:
+          - name: Authorization
+            value: Bearer {{ _.Token }}
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ base_url }}/api/v1/books/"
+        name: Create Book
+        meta:
+          id: req_4934291d868142a4b94d099ec1133ee2
+          created: 1764911626953
+          modified: 1764920982829
+          isPrivate: false
+          description: ""
+          sortKey: -1764911626953
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "title": "hi",
+              "author": "me",
+              "isbn": "1111111111111",
+              "description": "descr",
+              "genre": "horror",
+              "publication_year":2000,
+              "total_copies": 3,
+              "branch_id": 1
+            }
+        headers:
+          - name: Authorization
+            value: Bearer {{ _.Token }}
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ base_url }}/api/v1/books/#ID"
+        name: Update Book
+        meta:
+          id: req_0a8011e7186145caa525c38f99e35323
+          created: 1764911626954
+          modified: 1764921659647
+          isPrivate: false
+          description: ""
+          sortKey: -1764911626954
+        method: PUT
+        body:
+          mimeType: application/json
+          text: |
+            {
+              "title": "ho",
+              "author": "me",
+              "isbn": "1111111111111",
+              "description": "descr",
+              "genre": "horro",
+              "publication_year": 2000,
+              "total_copies": 3,
+              "available_copies": 0,
+              "branch_id": 1
+            }
+        headers:
+          - name: Authorization
+            value: Bearer {{ _.Token }}
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ base_url }}/api/v1/books/#ID"
+        name: Delete Book
+        meta:
+          id: req_1f1287d0457446f792278ad90fff7286
+          created: 1764911626955
+          modified: 1764921683497
+          isPrivate: false
+          description: ""
+          sortKey: -1764911626956
+        method: DELETE
+        headers:
+          - name: Authorization
+            value: Bearer {{ _.Token }}
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: Loans
+    meta:
+      id: fld_2d746a78f8534836804913787fa5ec69
+      created: 1764911626956
+      modified: 1764911626956
+      sortKey: -1764911626956
+      description: ""
+    children:
+      - url: "{{ base_url }}/api/v1/loans/"
+        name: Create Loan Request
+        meta:
+          id: req_8774aa6f0d8f4544affa9095166c4831
+          created: 1764911626957
+          modified: 1764919694290
+          isPrivate: false
+          description: ""
+          sortKey: -1764911626957
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "book_id": 1,
+              "branch_id": 1
+            }
+        headers:
+          - name: Authorization
+            value: Bearer {{ _.Token }}
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ base_url }}/api/v1/loans/"
+        name: List Loans
+        meta:
+          id: req_eb4e78fae6e74ed8838abf6ee7cf5e6e
+          created: 1764911626958
+          modified: 1764922428218
+          isPrivate: false
+          description: ""
+          sortKey: -1764911626958
+        method: GET
+        parameters:
+          - name: status
+            value: ""
+            description: MAYUSC
+            disabled: false
+            type: text
+            multiline: false
+          - name: branch_id
+            value: ""
+            description: ""
+            disabled: true
+        headers:
+          - name: Authorization
+            value: Bearer {{ _.Token }}
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ base_url }}/api/v1/loans"
+        name: Get Loan
+        meta:
+          id: req_2ecbf68f6ee546f0908053f6791724b2
+          created: 1764911626959
+          modified: 1764922482001
+          isPrivate: false
+          description: ""
+          sortKey: -1764911626959
+        method: GET
+        parameters:
+          - name: status
+            value: ""
+            description: ""
+            disabled: false
+        headers:
+          - name: Authorization
+            value: Bearer {{ _.Token }}
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ base_url }}/api/v1/loans/my-history"
+        name: My Loan History
+        meta:
+          id: req_944c05e129954e44a782af8245306156
+          created: 1764911626959
+          modified: 1764919679662
+          isPrivate: false
+          description: ""
+          sortKey: -1764911626959
+        method: GET
+        headers:
+          - name: Authorization
+            value: Bearer {{ _.Token }}
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ base_url }}/api/v1/loans/#LOANID"
+        name: Update Loan Status
+        meta:
+          id: req_b1471b8da14f4efa9185ce457fa52395
+          created: 1764911626960
+          modified: 1764922655369
+          isPrivate: false
+          description: ""
+          sortKey: -1764911626960
+        method: PATCH
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "new_status": "REQUESTED",
+              "note": "string"
+            }
+        headers:
+          - name: Authorization
+            value: Bearer {{ _.Token }}
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ base_url }}/api/v1/loans/run-overdue-job"
+        name: Run Overdue Job
+        meta:
+          id: req_7aaff5c7842a4014a950e0691e1c1bc3
+          created: 1764911626961
+          modified: 1764919672584
+          isPrivate: false
+          description: ""
+          sortKey: -1764911626961
+        method: POST
+        headers:
+          - name: Authorization
+            value: Bearer {{ _.Token }}
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: Users
+    meta:
+      id: fld_06f3b8f668814d74a2b8d9f86ce2c45e
+      created: 1764911626962
+      modified: 1764911626962
+      sortKey: -1764911626962
+      description: ""
+    children:
+      - url: "{{ base_url }}/api/v1/users/"
+        name: List Users
+        meta:
+          id: req_27d82cb79bee4035b6a0930dc2441d12
+          created: 1764911626963
+          modified: 1764920106943
+          isPrivate: false
+          description: ""
+          sortKey: -1764911626963
+        method: GET
+        headers:
+          - name: Authorization
+            value: Bearer {{ _.Token }}
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ base_url }}/api/v1/users/"
+        name: Create User
+        meta:
+          id: req_eb0967967b094a20af16a2661554dd12
+          created: 1764911626964
+          modified: 1764922689835
+          isPrivate: false
+          description: ""
+          sortKey: -1764911626964
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "email": "ded@gmail.com",
+              "full_name": "ded",
+              "password": "ded",
+              "role": "member",
+              "is_active": true,
+              "is_blocked": false
+            }
+        headers:
+          - name: Authorization
+            value: Bearer {{ _.Token }}
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ base_url }}/api/v1/users#ID"
+        name: Get User
+        meta:
+          id: req_ef09b379f6fa4229867f5386ba9b25ad
+          created: 1764911626964
+          modified: 1764923178206
+          isPrivate: false
+          description: ""
+          sortKey: -1764911626964
+        method: GET
+        headers:
+          - name: Authorization
+            value: Bearer {{ _.Token }}
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ base_url }}/api/v1/users/#ID"
+        name: Update User
+        meta:
+          id: req_a6fa1d66d76a43f5997c437d24602d3c
+          created: 1764911626965
+          modified: 1764923147684
+          isPrivate: false
+          description: ""
+          sortKey: -1764911626965
+        method: PUT
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "full_name": "ded",
+              "role": "ded",
+              "is_active": true,
+              "is_blocked": false,
+              "new_password": "ded"
+            }
+        headers:
+          - name: Authorization
+            value: Bearer {{ _.Token }}
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ base_url }}/api/v1/users/#ID"
+        name: Delete User
+        meta:
+          id: req_f9247369c6f944619b80234b4e162417
+          created: 1764911626966
+          modified: 1764919651722
+          isPrivate: false
+          description: ""
+          sortKey: -1764911626966
+        method: DELETE
+        headers:
+          - name: Authorization
+            value: Bearer {{ _.Token }}
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: Admin
+    meta:
+      id: fld_dbf47f18685a425fa3e261755e873dfe
+      created: 1764911626966
+      modified: 1764911626966
+      sortKey: -1764911626966
+      description: ""
+    children:
+      - url: "{{ base_url }}/admin/stats"
+        name: Get System Stats
+        meta:
+          id: req_e932edf84e9f4fa4a7221779704d6d1c
+          created: 1764911626967
+          modified: 1764918697048
+          isPrivate: false
+          description: ""
+          sortKey: -1764911626967
+        method: GET
+        headers:
+          - name: Authorization
+            value: Bearer {{ _.Token }}
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_cfbf1eb16a3c7c048a63f17b041f0915d6de335d
+    created: 1764911629328
+    modified: 1764911629328
+environments:
+  name: Base Environment
+  meta:
+    id: env_cfbf1eb16a3c7c048a63f17b041f0915d6de335d
+    created: 1764911626971
+    modified: 1764922088754
+    isPrivate: false
+  data:
+    base_url: http://localhost:8000
+    Token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyIiwicm9sZSI6IkFETUlOIiwiZXhwIjoxNzY0OTI1Njc2fQ.hX_VMYrCz-47xLnUjD7CiubZ4-8-1Vpy6IFul3olIdE
